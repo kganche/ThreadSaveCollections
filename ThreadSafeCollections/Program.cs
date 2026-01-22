@@ -4,7 +4,6 @@ var counter = new LogCounter();
 var collector = new LogCollector();
 var processor = new LogProcessor();
 
-var random = new Random();
 var threads = new Thread[5];
 
 for (int i = 0; i < 5; i++)
@@ -13,18 +12,18 @@ for (int i = 0; i < 5; i++)
 
     threads[i] = new Thread(() =>
     {
-        var rnd = new Random(threadId * Environment.TickCount);
+        var random = new Random(threadId * Environment.TickCount);
 
         for (int j = 0; j < 200; j++)
         {
-            var level = LogLevels.Levels[rnd.Next(3)];
+            var level = LogLevels.Levels[random.Next(3)];
             var log = new LogEntry($"Log from T{threadId}", level, DateTime.Now);
 
             counter.RecordLog(level);
             collector.Add(log);
             processor.Enqueue(log);
 
-            Thread.Sleep(rnd.Next(1, 10));
+            Thread.Sleep(random.Next(1, 10));
         }
     });
 
